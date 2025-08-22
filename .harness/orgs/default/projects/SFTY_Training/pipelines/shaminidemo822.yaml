@@ -172,7 +172,7 @@ pipeline:
                     image:
                       type: docker_v2
                       tag: <+pipeline.sequenceId>
-                      name: shaminiy/nodejs_tic_tac_toe_App
+                      name: shaminiy/nodejs_tic_tac_toe_app
                     sbom:
                       generate: true
                       format: spdx-json

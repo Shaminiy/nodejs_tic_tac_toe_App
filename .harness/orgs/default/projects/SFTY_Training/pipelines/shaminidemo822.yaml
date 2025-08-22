@@ -188,7 +188,7 @@ pipeline:
                             spec:
                               connectorRef: Shamini_GCP_connector
                               bucket: shamini-harness-python
-                              sourcePath: test-results.xml, dist/**
+                              sourcePath: test-results.xml, dist/**, eslint-report.xml
                               target: python-harness/
                         - step:
                             type: Plugin

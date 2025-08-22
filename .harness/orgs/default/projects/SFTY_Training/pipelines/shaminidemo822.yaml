@@ -223,26 +223,28 @@ pipeline:
           inputs: {}
         tags: {}
     - stage:
-        name: RUN APPLICATION
-        identifier: RUN_APPLICATION
+        name: run app
+        identifier: run_app
         description: ""
-        type: Custom
+        type: CI
         spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
           execution:
             steps:
               - step:
-                  type: ShellScript
-                  name: run app
-                  identifier: run_app
+                  type: Run
+                  name: Run_app
+                  identifier: Run_app
                   spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: npm run dev
-                    environmentVariables: []
-                    outputVariables: []
-                  timeout: 10m
-        tags: {}
+                    shell: Sh
+                    command: npm run dev
   allowStageExecutions: true

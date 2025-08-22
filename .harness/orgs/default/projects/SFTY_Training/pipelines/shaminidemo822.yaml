@@ -64,10 +64,17 @@ pipeline:
                   name: linting
                   identifier: linting
                   spec:
+                    connectorRef: shamini_dockerhub_creds
+                    image: node:18
                     shell: Sh
                     command: |-
                       npm install -D eslint-formatter-junit
                       npm run lint
+                    reports:
+                      type: JUnit
+                      spec:
+                        paths:
+                          - eslint-report.xml
               - stepGroup:
                   name: Security_scan
                   identifier: Security_scan

@@ -246,5 +246,8 @@ pipeline:
                   identifier: Run_app
                   spec:
                     shell: Sh
-                    command: npm run dev
+                    command: |-
+                      npm install
+                      npm run build
+                      npm run dev
   allowStageExecutions: true

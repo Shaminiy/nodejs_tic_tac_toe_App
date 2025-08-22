@@ -65,7 +65,9 @@ pipeline:
                   identifier: linting
                   spec:
                     shell: Sh
-                    command: npm run lint
+                    command: |-
+                      npm install -D eslint-formatter-junit
+                      npm run lint
               - stepGroup:
                   name: Security_scan
                   identifier: Security_scan

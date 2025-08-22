@@ -173,15 +173,26 @@ pipeline:
                   name: Upload Aritifacts
                   identifier: Upload_Aritifacts
                   steps:
-                    - step:
-                        type: GCSUpload
-                        name: GCSUpload
-                        identifier: GCSUpload
-                        spec:
-                          connectorRef: Shamini_GCP_connector
-                          bucket: shamini-harness-python
-                          sourcePath: test-results.xml, dist/**
-                          target: python-harness/
+                    - parallel:
+                        - step:
+                            type: GCSUpload
+                            name: GCSUpload
+                            identifier: GCSUpload
+                            spec:
+                              connectorRef: Shamini_GCP_connector
+                              bucket: shamini-harness-python
+                              sourcePath: test-results.xml, dist/**
+                              target: python-harness/
+                        - step:
+                            type: Plugin
+                            name: display_artifacts
+                            identifier: display_artifacts
+                            spec:
+                              connectorRef: shamini_dockerhub_creds
+                              image: plugins/artifact-metadata-publisher
+                              settings:
+                                file_urls: https://storage.googleapis.com/shamini-harness-python/python-harness/
+                                artifact_file: results-test.xml
         variables:
           - name: shamini_sonarqube_token
             type: Secret

@@ -222,3 +222,27 @@ pipeline:
           project: SFTY_Training
           inputs: {}
         tags: {}
+    - stage:
+        name: RUN APPLICATION
+        identifier: RUN_APPLICATION
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: ShellScript
+                  name: run app
+                  identifier: run_app
+                  spec:
+                    shell: Bash
+                    executionTarget: {}
+                    source:
+                      type: Inline
+                      spec:
+                        script: npm run dev
+                    environmentVariables: []
+                    outputVariables: []
+                  timeout: 10m
+        tags: {}
+  allowStageExecutions: true

@@ -211,3 +211,14 @@ pipeline:
             description: ""
             required: false
             value: shamini_snyk_token
+    - stage:
+        name: IACM
+        identifier: IACM
+        description: ""
+        type: Pipeline
+        spec:
+          org: default
+          pipeline: Shamini_IACM_GCP
+          project: SFTY_Training
+          inputs: {}
+        tags: {}

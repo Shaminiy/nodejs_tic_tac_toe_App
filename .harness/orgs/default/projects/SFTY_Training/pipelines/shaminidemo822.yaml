@@ -1,0 +1,193 @@
+pipeline:
+  name: shamini-demo-8-22
+  identifier: shaminidemo822
+  projectIdentifier: SFTY_Training
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: shamini_github
+        repoName: nodejs_tic_tac_toe_App
+        build: <+input>
+  stages:
+    - stage:
+        name: CI
+        identifier: CI
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Install dependencies
+                  identifier: Install_dependencies
+                  spec:
+                    shell: Sh
+                    command: |-
+                      npm install
+                      npm run build
+              - parallel:
+                  - step:
+                      type: Run
+                      name: Unit test
+                      identifier: Unit_test
+                      spec:
+                        shell: Sh
+                        command: npm run test
+                        reports:
+                          type: JUnit
+                          spec:
+                            paths:
+                              - test-results.xml
+                  - step:
+                      type: Test
+                      name: Unittest-TI
+                      identifier: UnittestTI
+                      spec:
+                        shell: Sh
+                        command: npm test
+                        intelligenceMode: true
+              - step:
+                  type: Run
+                  name: linting
+                  identifier: linting
+                  spec:
+                    shell: Sh
+                    command: npm run lint
+              - stepGroup:
+                  name: Security_scan
+                  identifier: Security_scan
+                  steps:
+                    - parallel:
+                        - step:
+                            type: Sonarqube
+                            name: sonaqube
+                            identifier: sonaqube
+                            spec:
+                              mode: orchestration
+                              config: default
+                              target:
+                                type: repository
+                                detection: auto
+                              advanced:
+                                log:
+                                  level: info
+                                fail_on_severity: critical
+                              auth:
+                                access_token: <+stage.variables.shamini_sonarqube_token>
+                                domain: https://sonarcloud.io/
+                                ssl: true
+                              tool:
+                                project_key: nodejs_tic_tac_toe_App
+                        - step:
+                            type: Snyk
+                            name: Snyk
+                            identifier: Snyk
+                            spec:
+                              mode: orchestration
+                              config: default
+                              target:
+                                type: repository
+                                detection: auto
+                              advanced:
+                                log:
+                                  level: info
+                                fail_on_severity: critical
+                              privileged: true
+                              auth:
+                                access_token: <+stage.variables.shamini_snyk_token>
+                              sbom:
+                                generate: true
+                                format: cyclonedx-json
+                              tool:
+                                ingest_tool_severity: true
+                        - step:
+                            type: Gitleaks
+                            name: Gitleaks
+                            identifier: Gitleaks
+                            spec:
+                              mode: orchestration
+                              config: default
+                              target:
+                                type: repository
+                                detection: auto
+                              advanced:
+                                log:
+                                  level: info
+                                fail_on_severity: critical
+                  failureStrategies:
+                    - onFailure:
+                        errors:
+                          - AllErrors
+                        action:
+                          type: MarkAsFailure
+                  when:
+                    stageStatus: All
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: Publish image
+                  identifier: Publish_image
+                  spec:
+                    connectorRef: shamini_dockerhub_creds
+                    repo: shaminiy/nodejs_tic_tac_toe_App
+                    tags:
+                      - <+pipeline.sequenceId>
+                    caching: true
+              - step:
+                  type: AquaTrivy
+                  name: Image_scan
+                  identifier: Image_scan
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: container
+                      detection: auto
+                    advanced:
+                      log:
+                        level: info
+                      fail_on_severity: critical
+                    privileged: true
+                    image:
+                      type: docker_v2
+                      tag: <+pipeline.sequenceId>
+                      name: shaminiy/nodejs_tic_tac_toe_App
+                    sbom:
+                      generate: true
+                      format: spdx-json
+              - stepGroup:
+                  name: Upload Aritifacts
+                  identifier: Upload_Aritifacts
+                  steps:
+                    - step:
+                        type: GCSUpload
+                        name: GCSUpload
+                        identifier: GCSUpload
+                        spec:
+                          connectorRef: Shamini_GCP_connector
+                          bucket: shamini-harness-python
+                          sourcePath: test-results.xml, dist/**
+                          target: python-harness/
+        variables:
+          - name: shamini_sonarqube_token
+            type: Secret
+            description: ""
+            required: true
+            value: shamini_sonarqube_token
+          - name: shamini_snyk_token
+            type: Secret
+            description: ""
+            required: false
+            value: shamini_snyk_token

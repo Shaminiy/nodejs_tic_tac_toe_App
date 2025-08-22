@@ -150,7 +150,7 @@ pipeline:
                   identifier: Publish_image
                   spec:
                     connectorRef: shamini_dockerhub_creds
-                    repo: shaminiy/nodejs_tic_tac_toe_App
+                    repo: shaminiy/nodejs_tic_tac_toe_app
                     tags:
                       - <+pipeline.sequenceId>
                     caching: true

@@ -80,6 +80,51 @@ pipeline:
                     tags:
                       - "8"
                     caching: true
+    - stage:
+        name: deploy-green-v2
+        identifier: deploygreenv2
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          environment:
+            useFromStage:
+              stage: bluegreenCD
+          execution:
+            steps:
+              - step:
+                  name: Stage Deployment
+                  identifier: stageDeployment
+                  type: K8sBlueGreenDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+              - step:
+                  name: Swap primary with stage service
+                  identifier: bgSwapServices
+                  type: K8sBGSwapServices
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+            rollbackSteps:
+              - step:
+                  name: Swap primary with stage service
+                  identifier: rollbackBgSwapServices
+                  type: K8sBGSwapServices
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+          service:
+            useFromStage:
+              stage: bluegreenCD
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
   properties:
     ci:
       codebase:

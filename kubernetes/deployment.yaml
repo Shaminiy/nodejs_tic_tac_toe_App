@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tic-tac-toe
-        image: shaminiy/nodejs_tic_tac_toe_app:7
+        image: shaminiy/nodejs_tic_tac_toe_app:8
         # Image will be automatically updated by CI/CD pipeline
         imagePullPolicy: Always
         ports:

@@ -53,34 +53,6 @@ pipeline:
               action:
                 type: StageRollback
     - stage:
-        name: build-v2
-        identifier: buildv2
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: false
-          platform:
-            os: Linux
-            arch: Amd64
-          runtime:
-            type: Cloud
-            spec: {}
-          execution:
-            steps:
-              - step:
-                  type: BuildAndPushDockerRegistry
-                  name: buildversion2
-                  identifier: buildversion2
-                  spec:
-                    connectorRef: shamini_dockerhub_creds
-                    repo: shaminiy/nodejs_tic_tac_toe_app
-                    tags:
-                      - "8"
-                    caching: true
-    - stage:
         name: deploy-green-v2
         identifier: deploygreenv2
         description: ""

@@ -88,8 +88,15 @@ pipeline:
                   spec:
                     skipDryRun: false
           service:
-            useFromStage:
-              stage: bluegreenCD
+            serviceRef: shamini_tic_tac_toe_app
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
         tags: {}
         failureStrategies:
           - onFailure:

@@ -6,7 +6,7 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: deploy-green-v2
+        name: blue-green-deployment
         identifier: deploygreenv2
         description: ""
         type: Deployment

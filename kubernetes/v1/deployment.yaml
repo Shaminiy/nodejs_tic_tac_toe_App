@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tic-tac-toe
-  namespace: harness-delegate-ng # Harness will inject the namespace here
+  namespace:  {{.Values.namespace}}
   labels:
     app: tic-tac-toe
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: tic-tac-toe
-        image: <+artifact.image>
+        image: {{.Values.image}}
         imagePullPolicy: Always
         ports:
         - containerPort: 80

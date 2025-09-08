@@ -6,53 +6,6 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: rolloutdeploymentbluev1
-        identifier: bluegreenCD
-        description: ""
-        type: Deployment
-        spec:
-          deploymentType: Kubernetes
-          service:
-            serviceRef: shamini_tic_tac_toe_app
-            serviceInputs:
-              serviceDefinition:
-                type: Kubernetes
-                spec:
-                  artifacts:
-                    primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
-          environment:
-            environmentRef: Shamini_tictactoe_test_env
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: shamini_tictactoe_infra
-          execution:
-            steps:
-              - step:
-                  name: Rollout Deployment
-                  identifier: rolloutDeployment
-                  type: K8sRollingDeploy
-                  timeout: 10m
-                  spec:
-                    skipDryRun: false
-                    pruningEnabled: false
-            rollbackSteps:
-              - step:
-                  name: Rollback Rollout Deployment
-                  identifier: rollbackRolloutDeployment
-                  type: K8sRollingRollback
-                  timeout: 10m
-                  spec:
-                    pruningEnabled: false
-        tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: StageRollback
-    - stage:
         name: deploy-green-v2
         identifier: deploygreenv2
         description: ""
@@ -60,8 +13,10 @@ pipeline:
         spec:
           deploymentType: Kubernetes
           environment:
-            useFromStage:
-              stage: bluegreenCD
+            environmentRef: Shamini_tictactoe_test_env
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: shamini_tictactoe_infra
           execution:
             steps:
               - step:
@@ -104,10 +59,4 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-  properties:
-    ci:
-      codebase:
-        connectorRef: shamini_github
-        repoName: nodejs_tic_tac_toe_App
-        build: <+input>
   allowStageExecutions: true

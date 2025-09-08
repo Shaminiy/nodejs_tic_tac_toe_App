@@ -28,35 +28,6 @@ pipeline:
                     skipDryRun: false
                     pruningEnabled: false
               - step:
-                  type: ShellScript
-                  name: gatekeeper
-                  identifier: gatekeeper
-                  spec:
-                    shell: Bash
-                    executionTarget: {}
-                    source:
-                      type: Inline
-                      spec:
-                        script: |-
-                          # Read the runtime input variable
-                          USER_CHOICE="<+pipeline.variables.SKIP_NEXT_STEP>"
-
-                          # Set an output variable for the next step based on the input
-                          # If user sets SKIP_NEXT_STEP to "false", then we should NOT skip the next step (so should_skip=false).
-                          if [[ "$USER_CHOICE" == "false" ]]; then
-                            echo "User chose to PROCEED. The next step will RUN."
-                            export SHOULD_SKIP_NEXT_STEP=false
-                          else
-                            echo "User chose to SKIP. The next step will be skipped."
-                            export SHOULD_SKIP_NEXT_STEP=true
-                          fi
-                    environmentVariables: []
-                    outputVariables:
-                      - name: should_skip
-                        type: String
-                        value: SHOULD_SKIP_NEXT_STEP
-                  timeout: 10m
-              - step:
                   name: Swap primary with stage service
                   identifier: bgSwapServices
                   type: K8sBGSwapServices
@@ -65,7 +36,6 @@ pipeline:
                     skipDryRun: false
                   when:
                     stageStatus: Success
-                    condition: <+execution.steps.manual_gatekeeper.output.outputVariables.should_skip> == "true"
             rollbackSteps:
               - step:
                   name: Swap primary with stage service

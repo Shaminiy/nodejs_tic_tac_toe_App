@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tic-tac-toe
-  namespace: {{.Values.namespace}} # Harness will inject the namespace here
+  namespace: harness-delegate-ng # Harness will inject the namespace here
   labels:
     app: tic-tac-toe
 spec:
@@ -17,13 +17,10 @@ spec:
     spec:
       containers:
       - name: tic-tac-toe
-        image: {{.Values.image}} # Harness will inject the full image tag here
+        image: shaminiy/nodejs_tic_tac_toe_app
         imagePullPolicy: Always
         ports:
         - containerPort: 80
-        env:
-        - name: VERSION
-          value: {{.Values.version}} # Harness will inject the version label here
         resources:
           limits:
             cpu: "0.5"

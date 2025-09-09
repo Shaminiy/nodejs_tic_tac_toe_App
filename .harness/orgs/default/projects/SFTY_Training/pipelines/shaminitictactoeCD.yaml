@@ -76,10 +76,4 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-        variables:
-          - name: SKIP_NEXT_STEP
-            type: String
-            description: ""
-            required: true
-            value: <+input>.executionInput().selectOneFrom(true,false)
   allowStageExecutions: true

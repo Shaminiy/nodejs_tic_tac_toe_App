@@ -1,0 +1,26 @@
+inputSet:
+  pipeline:
+    identifier: Shaminitictactoecanarycd
+    stages:
+      - stage:
+          identifier: canary_deployment
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: shaminitictactoeimage
+                        sources:
+                          - identifier: shaminitictactoeimage
+                            type: DockerRegistry
+                            spec:
+                              imagePath: shaminiy/nodejs_tic_tac_toe_app
+                              tag: "8"
+  name: tictactoe-tag8
+  identifier: tictactoetag8
+  orgIdentifier: default
+  projectIdentifier: SFTY_Training

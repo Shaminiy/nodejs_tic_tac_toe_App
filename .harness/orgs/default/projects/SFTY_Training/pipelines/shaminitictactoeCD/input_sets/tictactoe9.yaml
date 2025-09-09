@@ -1,0 +1,30 @@
+inputSet:
+  name: tictactoe-9
+  identifier: tictactoe9
+  orgIdentifier: default
+  projectIdentifier: SFTY_Training
+  pipeline:
+    identifier: shaminitictactoeCD
+    stages:
+      - stage:
+          identifier: deploygreenv2
+          type: Deployment
+          spec:
+            service:
+              serviceInputs:
+                serviceDefinition:
+                  type: Kubernetes
+                  spec:
+                    artifacts:
+                      primary:
+                        primaryArtifactRef: shaminitictactoeimage
+                        sources:
+                          - identifier: shaminitictactoeimage
+                            type: DockerRegistry
+                            spec:
+                              imagePath: shaminiy/nodejs_tic_tac_toe_app
+                              tag: "9"
+    properties:
+      ci:
+        codebase:
+          build: <+input>

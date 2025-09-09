@@ -6,6 +6,34 @@ pipeline:
   tags: {}
   stages:
     - stage:
+        name: pushdockerimage
+        identifier: pushdockerimage
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry
+                  identifier: BuildAndPushDockerRegistry
+                  spec:
+                    connectorRef: shamini_dockerhub_creds
+                    repo: shaminiy/nodejs_tic_tac_toe_app
+                    tags:
+                      - "9"
+                    caching: true
+    - stage:
         name: blue-green-deployment
         identifier: deploygreenv2
         description: ""
@@ -77,3 +105,9 @@ pipeline:
               action:
                 type: StageRollback
   allowStageExecutions: true
+  properties:
+    ci:
+      codebase:
+        connectorRef: shamini_github
+        repoName: nodejs_tic_tac_toe_App
+        build: <+input>

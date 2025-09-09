@@ -41,7 +41,7 @@ pipeline:
                         spec:
                           instanceSelection:
                             spec:
-                              count: 2
+                              count: <+input>
                             type: Count
                           skipDryRun: false
                     - step:

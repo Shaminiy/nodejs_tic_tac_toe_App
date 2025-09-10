@@ -129,3 +129,4 @@ pipeline:
         connectorRef: shamini_github
         repoName: nodejs_tic_tac_toe_App
         build: <+input>
+  allowStageExecutions: true

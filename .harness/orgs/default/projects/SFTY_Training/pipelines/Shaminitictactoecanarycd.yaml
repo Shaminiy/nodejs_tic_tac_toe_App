@@ -6,6 +6,33 @@ pipeline:
   tags: {}
   stages:
     - stage:
+        name: docker image
+        identifier: docker_image
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: false
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Cloud
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry
+                  identifier: BuildAndPushDockerRegistry
+                  spec:
+                    connectorRef: shamini_dockerhub_creds
+                    repo: shaminiy/nodejs_tic_tac_toe_app
+                    tags:
+                      - "10"
+    - stage:
         name: canary deployment
         identifier: canary_deployment
         description: ""
@@ -96,3 +123,9 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+  properties:
+    ci:
+      codebase:
+        connectorRef: shamini_github
+        repoName: nodejs_tic_tac_toe_App
+        build: <+input>

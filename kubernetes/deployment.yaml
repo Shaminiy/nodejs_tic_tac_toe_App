@@ -18,6 +18,9 @@ spec:
       containers:
       - name: tic-tac-toe
         image: {{.Values.image}}
+        env:
+          - name: log_level
+            value: {{.Values.log_level}}
         imagePullPolicy: Always
         ports:
         - containerPort: 80

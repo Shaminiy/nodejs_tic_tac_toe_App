@@ -1,1 +1,1 @@
-log_level: "<+serviceVariables.log_level>"
+log_level: "<+env.variables.log_level>"

@@ -166,7 +166,7 @@ pipeline:
             type: String
             description: ""
             required: false
-            value: error
+            value: <+input>
   properties:
     ci:
       codebase:

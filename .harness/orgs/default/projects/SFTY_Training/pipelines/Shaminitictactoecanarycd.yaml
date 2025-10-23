@@ -161,6 +161,12 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+        variables:
+          - name: log_level
+            type: String
+            description: ""
+            required: false
+            value: error
   properties:
     ci:
       codebase:

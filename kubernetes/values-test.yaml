@@ -1,1 +1,1 @@
-log_level: "<+secrets.getValue('log_level')>"
+log_level: "<+serviceVariables.log_level>"

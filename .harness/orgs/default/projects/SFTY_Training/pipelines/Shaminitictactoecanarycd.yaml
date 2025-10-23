@@ -22,6 +22,11 @@ pipeline:
                     primary:
                       primaryArtifactRef: <+input>
                       sources: <+input>
+                  variables:
+                    - name: log_level
+                      type: String
+                      default: info
+                      value: <+input>.default(info)
           environment:
             environmentRef: Shamini_tictactoe_test_env
             deployToAll: false
@@ -128,6 +133,11 @@ pipeline:
                     primary:
                       primaryArtifactRef: <+input>
                       sources: <+input>
+                  variables:
+                    - name: log_level
+                      type: String
+                      default: info
+                      value: <+input>.default(info)
           environment:
             environmentRef: Shamini_tictactoe_test_env
             deployToAll: false

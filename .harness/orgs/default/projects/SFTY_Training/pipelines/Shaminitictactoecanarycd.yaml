@@ -111,6 +111,46 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+    - stage:
+        name: test overrides
+        identifier: test_overrides
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: shamini_tic_tac_toe_app
+            serviceInputs:
+              serviceDefinition:
+                type: Kubernetes
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
+          environment:
+            environmentRef: Shamini_tictactoe_test_env
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: shamini_tictactoe_infra
+          execution:
+            steps:
+              - step:
+                  type: K8sRollingDeploy
+                  name: K8sRollingDeploy
+                  identifier: K8sRollingDeploy
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
   properties:
     ci:
       codebase:

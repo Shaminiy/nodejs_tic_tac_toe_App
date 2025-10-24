@@ -126,8 +126,7 @@ pipeline:
                 spec:
                   artifacts:
                     primary:
-                      primaryArtifactRef: <+input>
-                      sources: <+input>
+                      primaryArtifactRef: shaminitictactoeimage
           environment:
             environmentRef: Shamini_tictactoe_test_env
             deployToAll: false

@@ -1,4 +1,4 @@
 namespace: <+infra.namespace>
 image: <+artifact.image>
-# log_level: <+serviceVariables.log_level>
-log_level: <+infra.variables.log_level>
+log_level: <+serviceVariables.log_level>
+# log_level: <+infra.variables.log_level>

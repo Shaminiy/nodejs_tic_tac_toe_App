@@ -136,12 +136,11 @@ pipeline:
           execution:
             steps:
               - step:
-                  type: K8sRollingDeploy
-                  name: K8sRollingDeploy
-                  identifier: K8sRollingDeploy
+                  type: K8sDryRun
+                  name: dry run
+                  identifier: dry_run
                   spec:
-                    skipDryRun: false
-                    pruningEnabled: false
+                    encryptYamlOutput: false
                   timeout: 10m
             rollbackSteps: []
         tags: {}
